@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 
-const navLinks = ['Home', 'Features', 'Pricing', 'How it works', 'Download'];
+const navLinks = ['Home', 'Features', 'Pricing', 'How it works'];
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
