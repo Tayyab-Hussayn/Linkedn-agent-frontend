@@ -20,7 +20,7 @@ export interface ReleaseLinks {
   rpm: string | null;       // .rpm
 }
 
-const REPO = 'krawin/linkedin-hr-agent';
+const REPO = 'Tayyab-Hussayn/linkedin-hr-agent';
 const TOKEN = import.meta.env.VITE_GITHUB_TOKEN;
 
 export function useGitHubRelease() {

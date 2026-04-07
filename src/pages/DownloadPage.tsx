@@ -247,6 +247,8 @@ function DownloadCards() {
           {/* Download button */}
           <a
             href={links?.windows ?? '#'}
+            target="_blank"
+            rel="noopener noreferrer"
             className={`w-full rounded-2xl py-4 font-body font-medium text-sm relative overflow-hidden bg-surface-2 border border-stroke text-text-primary group/btn flex items-center justify-center ${!links?.windows ? 'opacity-50 pointer-events-none' : ''}`}
           >
             <span className="absolute inset-0 accent-gradient opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
@@ -380,6 +382,8 @@ function DownloadCards() {
           {/* Download button */}
           <a
             href={linuxPkg === 'deb' ? (links?.deb ?? '#') : linuxPkg === 'rpm' ? (links?.rpm ?? '#') : '#'}
+            target="_blank"
+            rel="noopener noreferrer"
             className={`w-full rounded-2xl py-4 font-body font-medium text-sm relative overflow-hidden bg-surface-2 border border-stroke text-text-primary group/btn flex items-center justify-center ${(linuxPkg === 'appimage' || (!links?.deb && !links?.rpm)) ? 'opacity-50 pointer-events-none' : ''}`}
           >
             <span className="absolute inset-0 accent-gradient opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
