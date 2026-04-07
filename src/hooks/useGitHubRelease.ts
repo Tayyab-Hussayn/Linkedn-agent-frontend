@@ -15,9 +15,16 @@ export interface GitHubRelease {
 export interface ReleaseLinks {
   version: string;
   publishedAt: string;
-  windows: string | null;   // .exe
-  deb: string | null;       // .deb
-  rpm: string | null;       // .rpm
+  windows: string | null;
+  windowsSize: string | null;
+  macSilicon: string | null;       // Apple Silicon DMG
+  macSiliconSize: string | null;
+  macIntel: string | null;         // Intel DMG
+  macIntelSize: string | null;
+  deb: string | null;
+  debSize: string | null;
+  rpm: string | null;
+  rpmSize: string | null;
 }
 
 const REPO = 'Tayyab-Hussayn/linkedin-hr-agent';
@@ -40,19 +47,39 @@ export function useGitHubRelease() {
         return res.json() as Promise<GitHubRelease>;
       })
       .then(release => {
-        const find = (ext: string) =>
+        const findAsset = (ext: string) =>
           release.assets.find(
             a => a.name.endsWith(ext) && !a.name.endsWith('.sig')
-          )?.browser_download_url ?? null;
+          ) ?? null;
+
+        const fmtSize = (bytes: number) => `${(bytes / 1024 / 1024).toFixed(0)} MB`;
+
+        const winAsset    = findAsset('-setup.exe');
+        const debAsset    = findAsset('.deb');
+        const rpmAsset    = findAsset('.rpm');
+        // Tauri names macOS DMGs: Qalam_x.x.x_aarch64.dmg and Qalam_x.x.x_x64.dmg
+        const macSiliconAsset = release.assets.find(
+          a => a.name.endsWith('.dmg') && a.name.includes('aarch64') && !a.name.endsWith('.sig')
+        ) ?? null;
+        const macIntelAsset = release.assets.find(
+          a => a.name.endsWith('.dmg') && a.name.includes('x64') && !a.name.endsWith('.sig')
+        ) ?? null;
 
         setLinks({
           version: release.tag_name,
           publishedAt: new Date(release.published_at).toLocaleDateString('en-US', {
             month: 'long', year: 'numeric',
           }),
-          windows: find('-setup.exe'),
-          deb: find('.deb'),
-          rpm: find('.rpm'),
+          windows: winAsset?.browser_download_url ?? null,
+          windowsSize: winAsset ? fmtSize(winAsset.size) : null,
+          macSilicon: macSiliconAsset?.browser_download_url ?? null,
+          macSiliconSize: macSiliconAsset ? fmtSize(macSiliconAsset.size) : null,
+          macIntel: macIntelAsset?.browser_download_url ?? null,
+          macIntelSize: macIntelAsset ? fmtSize(macIntelAsset.size) : null,
+          deb: debAsset?.browser_download_url ?? null,
+          debSize: debAsset ? fmtSize(debAsset.size) : null,
+          rpm: rpmAsset?.browser_download_url ?? null,
+          rpmSize: rpmAsset ? fmtSize(rpmAsset.size) : null,
         });
       })
       .catch(() => setError(true))

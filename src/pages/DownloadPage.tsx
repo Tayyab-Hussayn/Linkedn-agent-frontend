@@ -241,7 +241,7 @@ function DownloadCards() {
           <div className="flex items-center justify-center gap-4 mb-8">
             <span className="rounded-full bg-surface-2 border border-stroke px-3 py-1 font-body text-xs text-muted">Installer (.exe)</span>
             <span className="text-muted">·</span>
-            <span className="rounded-full bg-surface-2 border border-stroke px-3 py-1 font-body text-xs text-muted">84 MB</span>
+            <span className="rounded-full bg-surface-2 border border-stroke px-3 py-1 font-body text-xs text-muted">{links?.windowsSize ?? '—'}</span>
           </div>
 
           {/* Download button */}
@@ -298,7 +298,9 @@ function DownloadCards() {
           <div className="flex items-center justify-center gap-4 mb-6">
             <span className="rounded-full bg-surface border border-stroke px-3 py-1 font-body text-xs text-muted">Disk Image (.dmg)</span>
             <span className="text-muted">·</span>
-            <span className="rounded-full bg-surface border border-stroke px-3 py-1 font-body text-xs text-muted">91 MB</span>
+            <span className="rounded-full bg-surface border border-stroke px-3 py-1 font-body text-xs text-muted">
+              {macArch === 'apple' ? (links?.macSiliconSize ?? '—') : (links?.macIntelSize ?? '—')}
+            </span>
           </div>
 
           {/* Architecture toggle */}
@@ -320,14 +322,14 @@ function DownloadCards() {
           </div>
 
           {/* Download button */}
-          <button className="w-full rounded-2xl py-4 font-body font-medium text-sm accent-gradient text-bg hover:scale-[1.02] glow-hover transition-transform">
-            Download for Mac
-          </button>
-
-          {/* SHA checksum */}
-          <p className="font-mono text-[10px] text-muted/40 mt-4 break-all">
-            SHA256: b7e9d4f2a1c8...
-          </p>
+          <a
+            href={macArch === 'apple' ? (links?.macSilicon ?? '#') : (links?.macIntel ?? '#')}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`w-full rounded-2xl py-4 font-body font-medium text-sm accent-gradient text-bg hover:scale-[1.02] glow-hover transition-transform flex items-center justify-center ${!(macArch === 'apple' ? links?.macSilicon : links?.macIntel) ? 'opacity-50 pointer-events-none' : ''}`}
+          >
+            {loading ? 'Loading...' : 'Download for Mac'}
+          </a>
         </motion.div>
 
         {/* Linux Card */}
@@ -376,7 +378,9 @@ function DownloadCards() {
               {linuxPkg === 'appimage' ? 'AppImage (.AppImage)' : linuxPkg === 'deb' ? 'Package (.deb)' : 'Package (.rpm)'}
             </span>
             <span className="text-muted">·</span>
-            <span className="rounded-full bg-surface-2 border border-stroke px-3 py-1 font-body text-xs text-muted">79 MB</span>
+            <span className="rounded-full bg-surface-2 border border-stroke px-3 py-1 font-body text-xs text-muted">
+              {linuxPkg === 'deb' ? (links?.debSize ?? '—') : linuxPkg === 'rpm' ? (links?.rpmSize ?? '—') : '—'}
+            </span>
           </div>
 
           {/* Download button */}
