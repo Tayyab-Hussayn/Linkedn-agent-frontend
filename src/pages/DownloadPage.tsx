@@ -5,6 +5,9 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import * as THREE from 'three';
 
+// Hooks
+import { useGitHubRelease } from '../hooks/useGitHubRelease';
+
 // Components
 import CustomCursor from '../components/CustomCursor';
 import Navbar from '../components/Navbar';
@@ -78,6 +81,7 @@ function Scene() {
 // ============================================
 function DownloadHero() {
   const headingRef = useRef<HTMLDivElement>(null);
+  const { links } = useGitHubRelease();
 
   useEffect(() => {
     const heading = headingRef.current;
@@ -150,7 +154,7 @@ function DownloadHero() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="font-body text-xs text-muted/60 uppercase tracking-[0.3em]"
         >
-          Version 1.0.4 — Released March 2026
+          {links ? `${links.version} — Released ${links.publishedAt}` : 'Loading...'}
         </motion.p>
       </div>
 
@@ -175,7 +179,8 @@ function DownloadHero() {
 // ============================================
 function DownloadCards() {
   const [macArch, setMacArch] = useState<'apple' | 'intel'>('apple');
-  const [linuxPkg, setLinuxPkg] = useState<'appimage' | 'deb' | 'rpm'>('appimage');
+  const [linuxPkg, setLinuxPkg] = useState<'appimage' | 'deb' | 'rpm'>('deb');
+  const { links, loading } = useGitHubRelease();
 
   const cardVariants = {
     hidden: { opacity: 0, y: 40 },
@@ -240,20 +245,18 @@ function DownloadCards() {
           </div>
 
           {/* Download button */}
-          <button className="w-full rounded-2xl py-4 font-body font-medium text-sm relative overflow-hidden bg-surface-2 border border-stroke text-text-primary group/btn">
+          <a
+            href={links?.windows ?? '#'}
+            className={`w-full rounded-2xl py-4 font-body font-medium text-sm relative overflow-hidden bg-surface-2 border border-stroke text-text-primary group/btn flex items-center justify-center ${!links?.windows ? 'opacity-50 pointer-events-none' : ''}`}
+          >
             <span className="absolute inset-0 accent-gradient opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
             <span className="relative z-10 flex items-center justify-center gap-2">
-              Download for Windows
+              {loading ? 'Loading...' : 'Download for Windows'}
               <svg className="w-4 h-4 transition-transform group-hover/btn:translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
               </svg>
             </span>
-          </button>
-
-          {/* SHA checksum */}
-          <p className="font-mono text-[10px] text-muted/40 mt-4 break-all">
-            SHA256: a3f8c2d1e5b7...
-          </p>
+          </a>
         </motion.div>
 
         {/* macOS Card (Featured) */}
@@ -375,20 +378,18 @@ function DownloadCards() {
           </div>
 
           {/* Download button */}
-          <button className="w-full rounded-2xl py-4 font-body font-medium text-sm relative overflow-hidden bg-surface-2 border border-stroke text-text-primary group/btn">
+          <a
+            href={linuxPkg === 'deb' ? (links?.deb ?? '#') : linuxPkg === 'rpm' ? (links?.rpm ?? '#') : '#'}
+            className={`w-full rounded-2xl py-4 font-body font-medium text-sm relative overflow-hidden bg-surface-2 border border-stroke text-text-primary group/btn flex items-center justify-center ${(linuxPkg === 'appimage' || (!links?.deb && !links?.rpm)) ? 'opacity-50 pointer-events-none' : ''}`}
+          >
             <span className="absolute inset-0 accent-gradient opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
             <span className="relative z-10 flex items-center justify-center gap-2">
-              Download for Linux
+              {loading ? 'Loading...' : linuxPkg === 'appimage' ? 'Not available yet' : 'Download for Linux'}
               <svg className="w-4 h-4 transition-transform group-hover/btn:translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
               </svg>
             </span>
-          </button>
-
-          {/* SHA checksum */}
-          <p className="font-mono text-[10px] text-muted/40 mt-4 break-all">
-            SHA256: c5d2e8f9b3a1...
-          </p>
+          </a>
         </motion.div>
       </div>
     </section>
