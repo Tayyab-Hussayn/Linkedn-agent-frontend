@@ -207,16 +207,16 @@ function DownloadCards() {
 
       {/* 3-Column Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {/* macOS Card (Featured) */}
+        {/* macOS Card */}
         <motion.div
           custom={0}
           variants={cardVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-60px' }}
-          className="bg-surface-2 rounded-3xl p-8 md:p-10 flex flex-col items-center text-center relative overflow-hidden scale-[1.02] md:scale-[1.04] gradient-border"
+          className="bg-surface border border-stroke rounded-3xl p-8 md:p-10 flex flex-col items-center text-center relative overflow-hidden transition-all duration-500 group hover:border-accent/30"
         >
-          <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-[70px] bg-accent/10 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-[70px] bg-accent/4 group-hover:bg-accent/10 transition-colors duration-700 pointer-events-none" />
           <div className="absolute inset-0 halftone-texture opacity-[0.05] pointer-events-none" />
 
           {/* Apple Logo SVG */}
@@ -259,27 +259,33 @@ function DownloadCards() {
             href={links?.macSilicon ?? '#'}
             target="_blank"
             rel="noopener noreferrer"
-            className={`w-full rounded-2xl py-4 font-body font-medium text-sm accent-gradient text-bg hover:scale-[1.02] glow-hover transition-transform flex items-center justify-center ${!links?.macSilicon ? 'opacity-50 pointer-events-none' : ''}`}
+            className={`w-full rounded-2xl py-4 font-body font-medium text-sm relative overflow-hidden bg-surface-2 border border-stroke text-text-primary group/btn flex items-center justify-center ${!links?.macSilicon ? 'opacity-50 pointer-events-none' : ''}`}
           >
-            {loading ? 'Loading...' : 'Download for Mac'}
+            <span className="absolute inset-0 accent-gradient opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
+            <span className="relative z-10 flex items-center justify-center gap-2">
+              {loading ? 'Loading...' : 'Download for Mac'}
+              <svg className="w-4 h-4 transition-transform group-hover/btn:translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
+            </span>
           </a>
         </motion.div>
 
-        {/* Windows Card */}
+        {/* Windows Card (Featured) */}
         <motion.div
           custom={1}
           variants={cardVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-60px' }}
-          className="bg-surface border border-stroke rounded-3xl p-8 md:p-10 flex flex-col items-center text-center relative overflow-hidden transition-all duration-500 group hover:border-accent/30"
+          className="bg-surface-2 rounded-3xl p-8 md:p-10 flex flex-col items-center text-center relative overflow-hidden scale-[1.02] md:scale-[1.04] gradient-border"
         >
           {/* Most Popular badge */}
           <span className="absolute top-5 right-5 rounded-full bg-accent/15 border border-accent/30 text-accent font-body text-[10px] uppercase tracking-widest px-3 py-1">
             Most Popular
           </span>
 
-          <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-[70px] bg-accent/4 group-hover:bg-accent/10 transition-colors duration-700 pointer-events-none" />
+          <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-[70px] bg-accent/10 pointer-events-none" />
           <div className="absolute inset-0 halftone-texture opacity-[0.05] pointer-events-none" />
 
           {/* Windows Logo SVG */}
@@ -312,15 +318,9 @@ function DownloadCards() {
             href={links?.windows ?? '#'}
             target="_blank"
             rel="noopener noreferrer"
-            className={`w-full rounded-2xl py-4 font-body font-medium text-sm relative overflow-hidden bg-surface-2 border border-stroke text-text-primary group/btn flex items-center justify-center ${!links?.windows ? 'opacity-50 pointer-events-none' : ''}`}
+            className={`w-full rounded-2xl py-4 font-body font-medium text-sm accent-gradient text-bg hover:scale-[1.02] glow-hover transition-transform flex items-center justify-center ${!links?.windows ? 'opacity-50 pointer-events-none' : ''}`}
           >
-            <span className="absolute inset-0 accent-gradient opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300" />
-            <span className="relative z-10 flex items-center justify-center gap-2">
-              {loading ? 'Loading...' : 'Download for Windows'}
-              <svg className="w-4 h-4 transition-transform group-hover/btn:translate-y-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-              </svg>
-            </span>
+            {loading ? 'Loading...' : 'Download for Windows'}
           </a>
         </motion.div>
 
