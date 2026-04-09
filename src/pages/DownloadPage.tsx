@@ -178,7 +178,7 @@ function DownloadHero() {
 // SECTION 2: DOWNLOAD CARDS
 // ============================================
 function DownloadCards() {
-  const [macArch, setMacArch] = useState<'apple' | 'intel'>('apple');
+  const [macArch] = useState<'apple'>('apple');
   const [linuxPkg, setLinuxPkg] = useState<'appimage' | 'deb' | 'rpm'>('deb');
   const { links, loading } = useGitHubRelease();
 
@@ -207,15 +207,78 @@ function DownloadCards() {
 
       {/* 3-Column Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-        {/* Windows Card */}
+        {/* macOS Card (Featured) */}
         <motion.div
           custom={0}
           variants={cardVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-60px' }}
+          className="bg-surface-2 rounded-3xl p-8 md:p-10 flex flex-col items-center text-center relative overflow-hidden scale-[1.02] md:scale-[1.04] gradient-border"
+        >
+          <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-[70px] bg-accent/10 pointer-events-none" />
+          <div className="absolute inset-0 halftone-texture opacity-[0.05] pointer-events-none" />
+
+          {/* Apple Logo SVG */}
+          <svg className="w-16 h-16 mb-8 transition-transform duration-500 ease-out hover:scale-110 hover:rotate-3" viewBox="0 0 100 100">
+            <defs>
+              <linearGradient id="appleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#C9A84C" />
+                <stop offset="50%" stopColor="#E8C97A" />
+                <stop offset="100%" stopColor="#A07830" />
+              </linearGradient>
+            </defs>
+            <path d="M50 25 C50 25 42 15 32 18 C20 22 18 35 18 40 C18 55 28 70 35 75 C40 78 45 75 50 72 C55 75 60 78 65 75 C72 70 82 55 82 40 C82 35 80 22 68 18 C58 15 50 25 50 25 Z" fill="url(#appleGradient)" />
+            <path d="M50 25 C52 18 58 10 68 12" stroke="url(#appleGradient)" strokeWidth="4" strokeLinecap="round" fill="none" />
+          </svg>
+
+          <h3 className="font-display italic text-3xl text-text-primary mb-2">macOS</h3>
+          <p className="font-body text-xs text-muted uppercase tracking-[0.2em] mb-6">macOS 12 Monterey and later</p>
+
+          {/* File info row */}
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <span className="rounded-full bg-surface border border-stroke px-3 py-1 font-body text-xs text-muted">Disk Image (.dmg)</span>
+            <span className="text-muted">·</span>
+            <span className="rounded-full bg-surface border border-stroke px-3 py-1 font-body text-xs text-muted">
+              {links?.macSiliconSize ?? '—'}
+            </span>
+          </div>
+
+          {/* Apple Silicon badge (Intel no longer available) */}
+          <div className="mb-6 inline-flex items-center gap-1 bg-surface border border-stroke rounded-full p-1">
+            <span className="px-3 py-1 rounded-full bg-surface-2 font-body text-xs text-text-primary">
+              Apple Silicon
+            </span>
+            <span className="px-3 py-1 font-body text-xs text-muted/40 cursor-not-allowed" title="Intel build unavailable">
+              Intel
+            </span>
+          </div>
+
+          {/* Download button */}
+          <a
+            href={links?.macSilicon ?? '#'}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`w-full rounded-2xl py-4 font-body font-medium text-sm accent-gradient text-bg hover:scale-[1.02] glow-hover transition-transform flex items-center justify-center ${!links?.macSilicon ? 'opacity-50 pointer-events-none' : ''}`}
+          >
+            {loading ? 'Loading...' : 'Download for Mac'}
+          </a>
+        </motion.div>
+
+        {/* Windows Card */}
+        <motion.div
+          custom={1}
+          variants={cardVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: '-60px' }}
           className="bg-surface border border-stroke rounded-3xl p-8 md:p-10 flex flex-col items-center text-center relative overflow-hidden transition-all duration-500 group hover:border-accent/30"
         >
+          {/* Most Popular badge */}
+          <span className="absolute top-5 right-5 rounded-full bg-accent/15 border border-accent/30 text-accent font-body text-[10px] uppercase tracking-widest px-3 py-1">
+            Most Popular
+          </span>
+
           <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-[70px] bg-accent/4 group-hover:bg-accent/10 transition-colors duration-700 pointer-events-none" />
           <div className="absolute inset-0 halftone-texture opacity-[0.05] pointer-events-none" />
 
@@ -258,77 +321,6 @@ function DownloadCards() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
               </svg>
             </span>
-          </a>
-        </motion.div>
-
-        {/* macOS Card (Featured) */}
-        <motion.div
-          custom={1}
-          variants={cardVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: '-60px' }}
-          className="bg-surface-2 rounded-3xl p-8 md:p-10 flex flex-col items-center text-center relative overflow-hidden scale-[1.02] md:scale-[1.04] gradient-border"
-        >
-          {/* Most Popular badge */}
-          <span className="absolute top-5 right-5 rounded-full bg-accent/15 border border-accent/30 text-accent font-body text-[10px] uppercase tracking-widest px-3 py-1">
-            Most Popular
-          </span>
-
-          <div className="absolute top-0 right-0 w-32 h-32 rounded-full blur-[70px] bg-accent/10 pointer-events-none" />
-          <div className="absolute inset-0 halftone-texture opacity-[0.05] pointer-events-none" />
-
-          {/* Apple Logo SVG */}
-          <svg className="w-16 h-16 mb-8 transition-transform duration-500 ease-out hover:scale-110 hover:rotate-3" viewBox="0 0 100 100">
-            <defs>
-              <linearGradient id="appleGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#C9A84C" />
-                <stop offset="50%" stopColor="#E8C97A" />
-                <stop offset="100%" stopColor="#A07830" />
-              </linearGradient>
-            </defs>
-            <path d="M50 25 C50 25 42 15 32 18 C20 22 18 35 18 40 C18 55 28 70 35 75 C40 78 45 75 50 72 C55 75 60 78 65 75 C72 70 82 55 82 40 C82 35 80 22 68 18 C58 15 50 25 50 25 Z" fill="url(#appleGradient)" />
-            <path d="M50 25 C52 18 58 10 68 12" stroke="url(#appleGradient)" strokeWidth="4" strokeLinecap="round" fill="none" />
-          </svg>
-
-          <h3 className="font-display italic text-3xl text-text-primary mb-2">macOS</h3>
-          <p className="font-body text-xs text-muted uppercase tracking-[0.2em] mb-6">macOS 12 Monterey and later</p>
-
-          {/* File info row */}
-          <div className="flex items-center justify-center gap-4 mb-6">
-            <span className="rounded-full bg-surface border border-stroke px-3 py-1 font-body text-xs text-muted">Disk Image (.dmg)</span>
-            <span className="text-muted">·</span>
-            <span className="rounded-full bg-surface border border-stroke px-3 py-1 font-body text-xs text-muted">
-              {macArch === 'apple' ? (links?.macSiliconSize ?? '—') : (links?.macIntelSize ?? '—')}
-            </span>
-          </div>
-
-          {/* Architecture toggle */}
-          <div className="mb-6 inline-flex items-center gap-1 bg-surface border border-stroke rounded-full p-1">
-            <button
-              onClick={() => setMacArch('apple')}
-              className={`relative px-3 py-1 rounded-full font-body text-xs transition-colors ${macArch === 'apple' ? 'bg-surface-2 text-text-primary' : 'text-muted'}`}
-            >
-              {macArch === 'apple' && <motion.span layoutId="arch-pill" className="absolute inset-0 bg-surface-2 rounded-full" />}
-              <span className="relative z-10">Apple Silicon</span>
-            </button>
-            <button
-              onClick={() => setMacArch('intel')}
-              className={`relative px-3 py-1 rounded-full font-body text-xs transition-colors ${macArch === 'intel' ? 'bg-surface-2 text-text-primary' : 'text-muted'}`}
-            >
-              {macArch === 'intel' && <motion.span layoutId="arch-pill" className="absolute inset-0 bg-surface-2 rounded-full" />}
-              <span className="relative z-10">Intel</span>
-            </button>
-          </div>
-
-          {/* Download button */}
-          <a
-            href={macArch === 'apple' ? (links?.macSilicon ?? '#') : (links?.macIntel ?? '#')}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={`w-full rounded-2xl py-4 font-body font-medium text-sm accent-gradient text-bg hover:scale-[1.02] glow-hover transition-transform flex items-center justify-center ${!(macArch === 'apple' ? links?.macSilicon : links?.macIntel) ? 'opacity-50 pointer-events-none' : ''}`}
-          >
-            {loading ? 'Loading...' : 'Download for Mac'}
           </a>
         </motion.div>
 
