@@ -1,59 +1,47 @@
-import { useState, useEffect } from 'react';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-
-// Components
-import LoadingScreen from '../components/LoadingScreen';
-import CustomCursor from '../components/CustomCursor';
-import Navbar from '../components/Navbar';
-
-// Sections
-import Hero from '../sections/Hero';
-import LogoTicker from '../sections/LogoTicker';
-import Features from '../sections/Features';
-import HowItWorks from '../sections/HowItWorks';
-import Pricing from '../sections/Pricing';
-import Testimonials from '../sections/Testimonials';
-import FinalCTA from '../sections/FinalCTA';
-import Footer from '../sections/Footer';
-
-// Register GSAP plugins
-gsap.registerPlugin(ScrollTrigger);
+import { useEffect } from 'react'
+import Navbar from '../components/Navbar'
+import Hero from '../sections/Hero'
+import ProductPreview from '../sections/ProductPreview'
+import Metrics from '../sections/Metrics'
+import Features from '../sections/Features'
+import HowItWorks from '../sections/HowItWorks'
+import Pricing from '../sections/Pricing'
+import Testimonials from '../sections/Testimonials'
+import FAQ from '../sections/FAQ'
+import FinalCTA from '../sections/FinalCTA'
+import Marquee from '../sections/Marquee'
+import Footer from '../sections/Footer'
 
 export default function HomePage() {
-  const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
-    // Refresh ScrollTrigger after loading
-    if (!isLoading) {
-      ScrollTrigger.refresh();
-    }
-  }, [isLoading]);
+    const obs = new IntersectionObserver(
+      entries => {
+        entries.forEach(el => {
+          if (el.isIntersecting) el.target.classList.add('v')
+        })
+      },
+      { threshold: 0.08, rootMargin: '0px 0px -30px 0px' }
+    )
+    document.querySelectorAll('.rv').forEach(el => obs.observe(el))
+    return () => obs.disconnect()
+  }, [])
 
   return (
-    <div className="relative">
-      {/* Loading Screen */}
-      {isLoading && (
-        <LoadingScreen onComplete={() => setIsLoading(false)} />
-      )}
-
-      {/* Custom Cursor */}
-      <CustomCursor />
-
-      {/* Navigation */}
+    <>
       <Navbar />
-
-      {/* Main Content */}
-      <main className={isLoading ? 'opacity-0' : 'opacity-100 transition-opacity duration-500'}>
+      <main>
         <Hero />
-        <LogoTicker />
+        <ProductPreview />
+        <Metrics />
         <Features />
         <HowItWorks />
         <Pricing />
         <Testimonials />
+        <FAQ />
         <FinalCTA />
+        <Marquee />
         <Footer />
       </main>
-    </div>
-  );
+    </>
+  )
 }
